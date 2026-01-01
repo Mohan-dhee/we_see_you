@@ -47,7 +47,9 @@ export async function GET(request: NextRequest) {
           account.safety_tier,
           account.safety_score,
           account.status,
-          new Date(account.last_flagged_at).toISOString(),
+          account.last_flagged_at
+            ? new Date(account.last_flagged_at).toISOString()
+            : "-",
         ].join(",")
       );
     });

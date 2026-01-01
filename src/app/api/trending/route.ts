@@ -45,7 +45,10 @@ export async function GET(request: NextRequest) {
     safety_tier: account.safety_tier ?? "clean",
     // Mock trend indicator based on recent reports
     trend_direction: "up", // Assuming if it appears here, reports are going up
-    recent_reports: Math.max(1, Math.round(account.flag_count * 0.2)), // Mock: 20% of reports are recent
+    recent_reports:
+      account.flag_count > 0
+        ? Math.max(1, Math.round(account.flag_count * 0.2))
+        : 0,
   }));
 
   return NextResponse.json({ data: trendingData });

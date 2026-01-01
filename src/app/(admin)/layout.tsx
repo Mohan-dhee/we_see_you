@@ -41,6 +41,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   } | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkAuth = async () => {
       const supabase = createClient();
       const {
@@ -48,33 +50,45 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/login");
+        if (isMounted) router.push("/login");
         return;
       }
 
-      const { data: profile } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("display_name, role")
         .eq("id", user.id)
         .single();
 
-      const role = profile?.role || "user";
-
-      if (role !== "moderator" && role !== "admin") {
-        router.push("/dashboard");
+      if (profileError || !profile) {
+        console.error("Profile fetch error:", profileError);
+        if (isMounted) router.push("/dashboard");
         return;
       }
 
-      setUser({
-        displayName: profile?.display_name || user.email?.split("@")[0],
-        email: user.email,
-        role: role,
-      });
-      setIsAuthorized(true);
-      setIsLoading(false);
+      const role = profile.role || "user";
+
+      if (role !== "moderator" && role !== "admin") {
+        if (isMounted) router.push("/dashboard");
+        return;
+      }
+
+      if (isMounted) {
+        setUser({
+          displayName: profile.display_name || user.email?.split("@")[0],
+          email: user.email,
+          role: role,
+        });
+        setIsAuthorized(true);
+        setIsLoading(false);
+      }
     };
 
     checkAuth();
+
+    return () => {
+      isMounted = false;
+    };
   }, [router]);
 
   const handleLogout = async () => {

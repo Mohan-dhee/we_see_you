@@ -77,7 +77,8 @@ CREATE TRIGGER account_safety_score_trigger
 UPDATE public.accounts
 SET flag_count = flag_count; -- This triggers the safety score calculation
 
--- Update RLS policy to allow public read access for search
+-- Update RLS policy to allow public read access for search (rows only)
+-- NOTE: Column-level restriction should be handled via the API or a View
 DROP POLICY IF EXISTS "Anyone can view accounts" ON public.accounts;
 CREATE POLICY "Public can view accounts" ON public.accounts
   FOR SELECT USING (true);

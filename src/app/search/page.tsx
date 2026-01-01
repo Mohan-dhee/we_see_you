@@ -52,7 +52,9 @@ export default function SearchPage() {
         const data: SearchResponse = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.query?.handle || "Search failed");
+          throw new Error(
+            (data as any)?.error || response.statusText || "Search failed"
+          );
         }
 
         setResults(data.results);

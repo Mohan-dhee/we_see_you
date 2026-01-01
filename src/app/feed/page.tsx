@@ -21,6 +21,9 @@ export default function FeedPage() {
         }
 
         const res = await fetch(`/api/feed?${params.toString()}`);
+        if (!res.ok) {
+          throw new Error(`Request failed: ${res.status}`);
+        }
         const data = await res.json();
 
         if (data.data) {

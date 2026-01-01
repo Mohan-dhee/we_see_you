@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -35,10 +35,24 @@ interface Report {
     platform: string;
     flag_count: number;
     status: string;
-  };
+  } | null;
 }
 
 export default function AdminReportsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center p-10">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </div>
+      }
+    >
+      <ReportsContent />
+    </Suspense>
+  );
+}
+
+function ReportsContent() {
   const searchParams = useSearchParams();
   const [reports, setReports] = useState<Report[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -259,13 +273,16 @@ export default function AdminReportsPage() {
                   </div>
 
                   {/* Actions */}
+                  {/* Actions */}
                   <div className="flex items-center gap-2">
-                    <Link href={`/admin/accounts/${report.accounts?.id}`}>
-                      <Button variant="outline" size="sm">
-                        View Account
-                        <ExternalLink className="w-3 h-3 ml-1" />
-                      </Button>
-                    </Link>
+                    {report.accounts?.id ? (
+                      <Link href={`/admin/accounts/${report.accounts.id}`}>
+                        <Button variant="outline" size="sm">
+                          View Account
+                          <ExternalLink className="w-3 h-3 ml-1" />
+                        </Button>
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
               </CardContent>

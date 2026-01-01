@@ -71,7 +71,12 @@ export default function AccountDetailPage() {
   useEffect(() => {
     const fetchData = async () => {
       const supabase = createClient();
-      const accountId = params.id as string;
+      const rawId = params?.id;
+      if (typeof rawId !== "string") {
+        setIsLoading(false);
+        return;
+      }
+      const accountId = rawId;
 
       // Fetch account
       const { data: accountData } = await supabase

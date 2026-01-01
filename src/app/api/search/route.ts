@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
   }
 
   // Clean the handle (remove @ if present)
-  const cleanHandle = handle.trim().replace(/^@/, "").toLowerCase();
+  let cleanHandle = handle.trim().replace(/^@/, "").toLowerCase();
+
+  // Escape special characters for ILIKE to prevent wildcard injection
+  const escapedHandle = cleanHandle.replace(/[\\%_]/g, "\\$&");
 
   const supabase = await createClient();
 
@@ -20,7 +23,7 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from("accounts")
     .select("*")
-    .ilike("handle", `%${cleanHandle}%`);
+    .ilike("handle", `%${escapedHandle}%`);
 
   // Filter by platform if specified
   if (platform && platform !== "all") {

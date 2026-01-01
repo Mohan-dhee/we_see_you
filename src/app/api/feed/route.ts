@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const limit = parseInt(searchParams.get("limit") || "20");
+  const parsedLimit = parseInt(searchParams.get("limit") || "20", 10);
+  const limit = isNaN(parsedLimit) ? 20 : parsedLimit;
   const platform = searchParams.get("platform");
   const type = searchParams.get("type");
 
