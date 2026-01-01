@@ -1,0 +1,243 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
+    --primary: 0 0% 8%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 97%;
+    --secondary-foreground: 0 0% 8%;
+    --muted: 0 0% 97%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 8 100% 62%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 92%;
+    --input: 0 0% 92%;
+    --ring: 0 0% 8%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 8%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 8 100% 62%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 85%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      sans-serif;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    @apply bg-foreground/10;
+  }
+}
+
+/* Cursor-style Typography */
+.display-hero {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+
+.display-lg {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+
+.display-md {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Accent color for highlights */
+.text-accent {
+  color: hsl(var(--accent));
+}
+
+/* Subtle background gradient */
+.bg-gradient-subtle {
+  background: linear-gradient(
+    180deg,
+    hsl(var(--secondary)) 0%,
+    hsl(var(--background)) 100%
+  );
+}
+
+/* Card with thin border - Cursor style */
+.card-cursor {
+  @apply rounded-lg border border-border bg-card;
+}
+
+/* Feature section background */
+.section-alt {
+  @apply bg-secondary/50;
+}
+
+/* Premium Animations - Snappy, not flowy */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+/* Stagger delays */
+.delay-100 {
+  animation-delay: 50ms;
+}
+.delay-200 {
+  animation-delay: 100ms;
+}
+.delay-300 {
+  animation-delay: 150ms;
+}
+.delay-400 {
+  animation-delay: 200ms;
+}
+
+/* Button styles - Cursor aesthetic */
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200;
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200;
+  background: transparent;
+  border: 1px solid hsl(var(--border));
+}
+
+.btn-secondary:hover {
+  background: hsl(var(--secondary));
+  border-color: hsl(var(--muted-foreground) / 0.3);
+}
+
+/* Link with accent color */
+.link-accent {
+  @apply text-sm font-medium transition-colors;
+  color: hsl(var(--accent));
+}
+
+.link-accent:hover {
+  opacity: 0.8;
+}
+
+/* Section spacing - generous whitespace */
+.section-padding {
+  @apply py-20 md:py-28 lg:py-36;
+}
+
+/* Grid for features */
+.feature-grid {
+  @apply grid gap-4 md:gap-6;
+}
+
+/* Feature card - minimal */
+.feature-card {
+  @apply rounded-lg border border-border bg-card p-6 md:p-8 transition-colors duration-200;
+}
+
+.feature-card:hover {
+  border-color: hsl(var(--muted-foreground) / 0.3);
+}
+
+/* Nav blur */
+.nav-blur {
+  @apply backdrop-blur-md bg-background/80;
+}
+
+/* Scrollbar - minimal */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
+
+/* Badge */
+.badge-accent {
+  @apply inline-flex items-center rounded px-2 py-0.5 text-xs font-medium;
+  background: hsl(var(--accent) / 0.15);
+  color: hsl(var(--accent));
+}
