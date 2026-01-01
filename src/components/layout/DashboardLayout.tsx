@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   X,
+  Shield,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -32,9 +33,12 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [user, setUser] = useState<{
+    id?: string;
     email?: string;
     displayName?: string;
+    role?: string;
   } | null>(null);
 
   useEffect(() => {
@@ -46,14 +50,25 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       if (user) {
         const { data: profile } = await supabase
           .from("profiles")
-          .select("display_name")
+          .select("display_name, role")
           .eq("id", user.id)
           .single();
 
         setUser({
+          id: user.id,
           email: user.email,
           displayName: profile?.display_name || user.email?.split("@")[0],
+          role: profile?.role || "user",
         });
+
+        // Fetch unread notification count
+        const { count } = await supabase
+          .from("notifications")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .eq("read", false);
+
+        setUnreadCount(count || 0);
       }
     };
     fetchUser();
@@ -100,24 +115,58 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="space-y-1">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;
+                const isNotifications = item.name === "Notifications";
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
+                      "flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors",
                       isActive
                         ? "bg-foreground text-background font-medium"
                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                     )}
                   >
-                    <item.icon className="w-4 h-4" />
-                    {item.name}
+                    <div className="flex items-center gap-3">
+                      <item.icon className="w-4 h-4" />
+                      {item.name}
+                    </div>
+                    {isNotifications && unreadCount > 0 && (
+                      <span
+                        className={cn(
+                          "min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full text-xs font-medium",
+                          isActive
+                            ? "bg-background text-foreground"
+                            : "bg-primary text-primary-foreground"
+                        )}
+                      >
+                        {unreadCount > 99 ? "99+" : unreadCount}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
             </div>
+
+            {/* Admin Link - Only for moderators/admins */}
+            {(user?.role === "moderator" || user?.role === "admin") && (
+              <div className="mt-4 pt-4 border-t border-border">
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
+                    pathname.startsWith("/admin")
+                      ? "bg-primary text-primary-foreground font-medium"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  )}
+                >
+                  <Shield className="w-4 h-4" />
+                  Admin Panel
+                </Link>
+              </div>
+            )}
           </nav>
 
           {/* User section */}

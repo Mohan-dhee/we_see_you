@@ -1,17 +1,41 @@
-import { createClient } from "@/lib/supabase/server";
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Instagram, Twitter, AlertTriangle, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Instagram,
+  Twitter,
+  AlertTriangle,
+  Users,
+  Download,
+  FileJson,
+  FileType,
+} from "lucide-react";
 
-export default async function AccountsPage() {
-  const supabase = await createClient();
+export default function AccountsPage() {
+  const [accounts, setAccounts] = useState<any[]>([]);
 
-  // Fetch flagged accounts
-  const { data: accounts } = await supabase
-    .from("accounts")
-    .select("*")
-    .order("flag_count", { ascending: false })
-    .limit(50);
+  useEffect(() => {
+    const fetchData = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("accounts")
+        .select("*")
+        .order("flag_count", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        console.error("Failed to load accounts:", error);
+        return;
+      }
+
+      if (data) setAccounts(data);
+    };
+    fetchData();
+  }, []);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -41,14 +65,38 @@ export default async function AccountsPage() {
     }
   };
 
+  const handleExport = (format: "csv" | "json") => {
+    window.location.href = `/api/blocklist/export?format=${format}`;
+  };
+
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Flagged Accounts</h1>
-        <p className="text-muted-foreground">
-          Accounts reported by the community. When an account receives 3+
-          reports, the community is alerted.
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold">Flagged Accounts</h1>
+          <p className="text-muted-foreground">
+            Accounts reported by the community. When an account receives 3+
+            reports, the community is alerted.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExport("csv")}
+          >
+            <FileType className="w-4 h-4 mr-2" />
+            CSV
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExport("json")}
+          >
+            <FileJson className="w-4 h-4 mr-2" />
+            JSON
+          </Button>
+        </div>
       </div>
 
       {/* Info Banner */}

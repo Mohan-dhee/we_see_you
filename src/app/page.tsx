@@ -40,10 +40,22 @@ export default function HomePage() {
 
           <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
             <Link
-              href="#features"
+              href="/search"
               className="hover:text-foreground transition-colors"
             >
-              Features
+              Search
+            </Link>
+            <Link
+              href="/trending"
+              className="hover:text-foreground transition-colors"
+            >
+              Trending
+            </Link>
+            <Link
+              href="/feed"
+              className="hover:text-foreground transition-colors"
+            >
+              Feed
             </Link>
             <Link
               href="#how-it-works"
@@ -102,10 +114,10 @@ export default function HomePage() {
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <Link
-                  href="#how-it-works"
+                  href="/search"
                   className="btn-secondary px-6 py-3 text-sm"
                 >
-                  Learn More
+                  Check an Account
                 </Link>
               </div>
             </>
