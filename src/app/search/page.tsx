@@ -49,14 +49,13 @@ export default function SearchPage() {
         }
 
         const response = await fetch(`/api/search?${params.toString()}`);
-        const data: SearchResponse = await response.json();
 
         if (!response.ok) {
-          throw new Error(
-            (data as any)?.error || response.statusText || "Search failed"
-          );
+          const message = await response.text();
+          throw new Error(message || response.statusText || "Search failed");
         }
 
+        const data: SearchResponse = await response.json();
         setResults(data.results);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Search failed");

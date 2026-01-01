@@ -102,8 +102,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const handleLogout = async () => {
     const supabase = createClient();
-    await supabase.auth.signOut();
-    window.location.href = "/";
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      window.location.href = "/";
+    }
   };
 
   if (isLoading) {

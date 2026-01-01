@@ -251,7 +251,7 @@ export default async function AccountDetailPage({ params }: PageProps) {
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Total Reports</span>
                 <span className="font-semibold text-lg">
-                  {account.flag_count}
+                  {account.flag_count ?? 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">

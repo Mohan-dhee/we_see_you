@@ -64,7 +64,15 @@ export default function AdminAccountsPage() {
         query = query.eq("status", statusFilter);
       }
 
-      const { data } = await query;
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("Error fetching accounts:", error);
+        setAccounts([]);
+        setIsLoading(false);
+        return;
+      }
+
       setAccounts((data as Account[]) || []);
       setIsLoading(false);
     };
