@@ -30,8 +30,8 @@ A community-powered platform for anonymously reporting abusive social media acco
 1. Clone the repository:
 
 ```bash
-git clone <repo-url>
-cd we-see-you
+git clone https://github.com/Mohan-dhee/we_see_you.git
+cd we_see_you
 ```
 
 2. Install dependencies:
