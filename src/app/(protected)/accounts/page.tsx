@@ -21,11 +21,16 @@ export default function AccountsPage() {
   useEffect(() => {
     const fetchData = async () => {
       const supabase = createClient();
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("accounts")
         .select("*")
         .order("flag_count", { ascending: false })
         .limit(50);
+
+      if (error) {
+        console.error("Failed to load accounts:", error);
+        return;
+      }
 
       if (data) setAccounts(data);
     };
