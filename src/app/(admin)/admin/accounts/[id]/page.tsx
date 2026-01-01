@@ -79,11 +79,16 @@ export default function AccountDetailPage() {
       const accountId = rawId;
 
       // Fetch account
-      const { data: accountData } = await supabase
+      const { data: accountData, error: accountError } = await supabase
         .from("accounts")
         .select("*")
         .eq("id", accountId)
         .single();
+
+      if (accountError) {
+        console.error("Error fetching account:", accountError);
+        setMessage({ type: "error", text: "Failed to fetch account details" });
+      }
 
       if (accountData) {
         setAccount(accountData as Account);

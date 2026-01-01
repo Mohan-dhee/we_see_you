@@ -13,6 +13,8 @@ export default function FeedPage() {
   const [filter, setFilter] = useState<"all" | "instagram" | "x">("all");
 
   useEffect(() => {
+    let active = true;
+
     const fetchFeed = async () => {
       try {
         const params = new URLSearchParams({ limit: "50" });
@@ -26,20 +28,25 @@ export default function FeedPage() {
         }
         const data = await res.json();
 
-        if (data.data) {
+        if (active && data.data) {
           setItems(data.data);
         }
       } catch (error) {
         console.error("Failed to fetch feed:", error);
       } finally {
-        setIsLoading(false);
+        if (active) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchFeed();
     // Poll every 30 seconds
     const interval = setInterval(fetchFeed, 30000);
-    return () => clearInterval(interval);
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
   }, [filter]);
 
   return (

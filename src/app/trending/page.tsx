@@ -27,11 +27,12 @@ export default function TrendingPage() {
       setIsLoading(true);
       try {
         const res = await fetch(`/api/trending?period=${period}`);
+        if (!res.ok) {
+          throw new Error(`Request failed: ${res.status}`);
+        }
         const data = await res.json();
 
-        if (data.data) {
-          setAccounts(data.data);
-        }
+        setAccounts(data.data ?? []);
       } catch (error) {
         console.error("Failed to fetch trending:", error);
       } finally {

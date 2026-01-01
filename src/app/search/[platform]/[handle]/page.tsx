@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import {
   SafetyBadge,
   SafetyScoreDisplay,
-  SafetyTier,
+  type SafetyTier,
 } from "@/components/ui/safety-badge";
 import { formatDistanceToNow, format } from "date-fns";
 

@@ -4,7 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const period = searchParams.get("period") || "7d"; // 24h, 7d, 30d
-  const limit = parseInt(searchParams.get("limit") || "10");
+  const limit = (() => {
+    const n = parseInt(searchParams.get("limit") || "10", 10);
+    return isNaN(n) || n <= 0 ? 10 : n;
+  })();
 
   const supabase = await createClient();
 
