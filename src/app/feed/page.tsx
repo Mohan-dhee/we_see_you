@@ -83,6 +83,7 @@ export default function FeedPage() {
                 onClick={() => {
                   setFilter(f);
                   setIsLoading(true);
+                  setItems([]);
                 }}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   filter === f

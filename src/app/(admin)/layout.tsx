@@ -50,7 +50,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        if (isMounted) router.push("/login");
+        if (isMounted) {
+          setIsLoading(false);
+          router.push("/login");
+        }
         return;
       }
 
@@ -62,14 +65,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
       if (profileError || !profile) {
         console.error("Profile fetch error:", profileError);
-        if (isMounted) router.push("/dashboard");
+        if (isMounted) {
+          setIsLoading(false);
+          router.push("/dashboard");
+        }
         return;
       }
 
       const role = profile.role || "user";
 
       if (role !== "moderator" && role !== "admin") {
-        if (isMounted) router.push("/dashboard");
+        if (isMounted) {
+          setIsLoading(false);
+          router.push("/dashboard");
+        }
         return;
       }
 

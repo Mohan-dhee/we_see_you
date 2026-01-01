@@ -157,7 +157,8 @@ export default async function AdminDashboard() {
                             "Unknown"}
                         </span>
                         <Badge variant="secondary" className="text-xs">
-                          {(report.accounts as { platform: string })?.platform}
+                          {(report.accounts as { platform: string })
+                            ?.platform ?? ""}
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground">

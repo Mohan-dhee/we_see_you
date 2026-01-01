@@ -27,7 +27,7 @@ interface Report {
   id: string;
   category: string;
   description: string;
-  evidence_urls: string[];
+  evidence_urls: string[] | null;
   created_at: string;
   accounts: {
     id: string;
@@ -263,11 +263,12 @@ function ReportsContent() {
                           {new Date(report.created_at).toLocaleDateString()} at{" "}
                           {new Date(report.created_at).toLocaleTimeString()}
                         </span>
-                        {report.evidence_urls?.length > 0 && (
-                          <span>
-                            {report.evidence_urls.length} evidence file(s)
-                          </span>
-                        )}
+                        {report.evidence_urls &&
+                          report.evidence_urls.length > 0 && (
+                            <span>
+                              {report.evidence_urls.length} evidence file(s)
+                            </span>
+                          )}
                       </div>
                     </div>
                   </div>

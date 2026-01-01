@@ -144,7 +144,7 @@ export default function SearchPage() {
           )}
 
           {/* No Results */}
-          {results && results.length === 0 && !isLoading && (
+          {results && results.length === 0 && !isLoading && !error && (
             <Card className="bg-emerald-500/10 border-emerald-500/20">
               <CardContent className="py-8 text-center">
                 <div className="text-4xl mb-3">🟢</div>
