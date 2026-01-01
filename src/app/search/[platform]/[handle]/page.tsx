@@ -151,7 +151,13 @@ export default async function AccountDetailPage({ params }: PageProps) {
   }
 
   const safetyScore = account.safety_score ?? 100;
-  const safetyTier = (account.safety_tier ?? "clean") as SafetyTier;
+  const safetyTier: SafetyTier =
+    account.safety_tier === "clean" ||
+    account.safety_tier === "caution" ||
+    account.safety_tier === "warning" ||
+    account.safety_tier === "danger"
+      ? account.safety_tier
+      : "clean";
 
   const platformConfig = {
     instagram: {
