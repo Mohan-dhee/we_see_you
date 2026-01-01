@@ -33,6 +33,13 @@ export async function GET(
     .select("category")
     .eq("account_id", id);
 
+  if (statsError) {
+    return NextResponse.json(
+      { error: "Failed to fetch report stats" },
+      { status: 500 }
+    );
+  }
+
   // Calculate category breakdown
   const categoryBreakdown: Record<string, number> = {};
   if (reportStats) {
